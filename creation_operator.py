@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Aug 11 22:20:00 2022
-
-@author: christinadaniel
-"""
-
+class Creation_Operator:
+    def __init__(self,numerical_index,spin_index):
+        self.numerical_index = numerical_index
+        self.spin_index = spin_index
+    def apply(self,simplified_occupation_state):
+        return 0
