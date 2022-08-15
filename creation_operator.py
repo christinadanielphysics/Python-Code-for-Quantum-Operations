@@ -12,15 +12,26 @@ class Creation_Operator:
         
         final_up_spin_list = initial_up_spin_list
         final_down_spin_list = initial_down_spin_list 
-        final_coefficient = 0.0 # annihilation
+        final_coefficient = initial_coefficient
         
         operator_numerical_index = self.numerical_index
         
         if self.spin == "up":
             final_up_spin_list = []
-            # CODE GOES HERE
+            skips = 0
+            for extra_skips,number in enumerate(initial_up_spin_list):
+                if number == operator_numerical_index:
+                    final_coefficient = 0.0 # annihilation
+                # CODE GOES HERE
         else:
             final_down_spin_list = []
-            # CODE GOES HERE
+            skips = len(initial_up_spin_list)
+            for extra_skips,number in enumerate(initial_down_spin_list):
+                if number == operator_numerical_index:
+                    final_coefficient = 0.0 # annihilation
+                # CODE GOES HERE
+                
+                
         
         final_state = occupation_state.Occupation_State(final_coefficient,final_up_spin_list,final_down_spin_list)
+        return final_state
