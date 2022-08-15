@@ -35,10 +35,10 @@ class Creation_Operator:
                     final_up_spin_list.append(number)
             if final_coefficient != 0:
                 final_coefficient = initial_coefficient * (-1)**skips
-            final_up_spin_list.append(operator_numerical_index)
-            while right_index < len(initial_up_spin_list):
-                final_up_spin_list.append(initial_up_spin_list[right_index])
-                right_index = right_index + 1
+                final_up_spin_list.append(operator_numerical_index)
+                while right_index < len(initial_up_spin_list):
+                    final_up_spin_list.append(initial_up_spin_list[right_index])
+                    right_index = right_index + 1
         else:
             final_down_spin_list = []
             skips = len(initial_up_spin_list)
@@ -54,10 +54,10 @@ class Creation_Operator:
                     final_down_spin_list.append(number)
             if final_coefficient != 0:
                 final_coefficient = initial_coefficient * (-1)**skips
-            final_down_spin_list.append(operator_numerical_index)
-            while right_index < len(initial_down_spin_list):
-                final_down_spin_list.append(initial_down_spin_list[right_index])
-                right_index = right_index + 1
+                final_down_spin_list.append(operator_numerical_index)
+                while right_index < len(initial_down_spin_list):
+                    final_down_spin_list.append(initial_down_spin_list[right_index])
+                    right_index = right_index + 1
                 
         
         final_state = occupation_state.Occupation_State(final_coefficient,final_up_spin_list,final_down_spin_list)
