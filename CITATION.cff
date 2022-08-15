@@ -4,7 +4,7 @@ authors:
   - family-names: Daniel
     given-names: Christina
     orcid: https://orcid.org/0000-0003-2680-435X
-title: "Quantum Operations"
+title: "Python Code for Quantum Operations"
 version: 1.0.0
 doi: ""
 date-released: 2021-08-15
