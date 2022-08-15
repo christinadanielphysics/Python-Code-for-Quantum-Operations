@@ -12,18 +12,31 @@ class Annihilation_Operator:
         
         final_up_spin_list = initial_up_spin_list
         final_down_spin_list = initial_down_spin_list
-        final_coefficient = initial_coefficient
+        final_coefficient = 0.0 
+
+        operator_numerical_index = self.numerical_index
         
         if self.spin == "up":
+            final_up_spin_list = []
             skips = 0
-            if (self.spin in initial_up_spin_list):
-                # CODE GOES HERE
+            for extra_skips,number in enumerate(initial_up_spin_list):
+                if number == operator_numerical_index:
+                    skips = skips + extra_skips
+                    final_coefficient = initial_coefficient * (-1)**skips
+                else:
+                    final_up_spin_list.append(number) 
+
             else:
                 final_coefficient = 0.0 # annihilation
         else:
+            final_down_spin_list = []
             skips = len(initial_up_spin_list)
-            if (self.spin in initial_down_spin_list):
-                # CODE GOES HERE
+            for extra_skips,number in enumerate(initial_down_spin_list):
+                if number == operator_numerical_index:
+                    skips = skips + extra_skips
+                    final_coefficient = initial_coefficient * (-1)**skips
+                else:
+                    final_down_spin_list.append(number) 
             else:
                 final_coefficient  = 0.0 # annihilation
         
