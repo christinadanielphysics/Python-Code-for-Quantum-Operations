@@ -10,15 +10,15 @@ class Creation_Operator:
         initial_down_spin_list = simplified_occupation_state.down_spin_list
         initial_coefficient = simplified_occupation_state.coefficient
         
+        if initial_coefficient == 0:
+            final_state = occupation_state.Occupation_State(0,[],[])
+            return final_state
+        
         final_up_spin_list = initial_up_spin_list
         final_down_spin_list = initial_down_spin_list 
         final_coefficient = initial_coefficient
         
         operator_numerical_index = self.numerical_index
-        
-        if initial_coefficient == 0:
-            final_state = occupation_state.Occupation_State(0,[],[])
-            return final_state
             
         if self.spin == "up":
             final_up_spin_list = []
