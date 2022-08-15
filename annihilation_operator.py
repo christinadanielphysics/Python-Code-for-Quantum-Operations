@@ -12,9 +12,13 @@ class Annihilation_Operator:
         
         final_up_spin_list = initial_up_spin_list
         final_down_spin_list = initial_down_spin_list
-        final_coefficient = 0.0 # annihilation
+        final_coefficient = 0 # annihilation
 
         operator_numerical_index = self.numerical_index
+        
+        if initial_coefficient == 0:
+            final_state = occupation_state.Occupation_State(0.0,[],[])
+            return final_state
         
         if self.spin == "up":
             final_up_spin_list = []
