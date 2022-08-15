@@ -4,7 +4,7 @@ To Use:
 
 Step 1: Download each .py file.
 
-Step 2: TBD
+Step 2: To be determined.
 
 To Cite:
 
