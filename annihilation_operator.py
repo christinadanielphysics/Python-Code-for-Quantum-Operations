@@ -12,7 +12,7 @@ class Annihilation_Operator:
         
         final_up_spin_list = initial_up_spin_list
         final_down_spin_list = initial_down_spin_list
-        final_coefficient = 0.0 
+        final_coefficient = 0.0 # annihilation
 
         operator_numerical_index = self.numerical_index
         
@@ -25,9 +25,6 @@ class Annihilation_Operator:
                     final_coefficient = initial_coefficient * (-1)**skips
                 else:
                     final_up_spin_list.append(number) 
-
-            else:
-                final_coefficient = 0.0 # annihilation
         else:
             final_down_spin_list = []
             skips = len(initial_up_spin_list)
@@ -37,8 +34,6 @@ class Annihilation_Operator:
                     final_coefficient = initial_coefficient * (-1)**skips
                 else:
                     final_down_spin_list.append(number) 
-            else:
-                final_coefficient  = 0.0 # annihilation
         
         final_state = occupation_state.Occupation_State(final_coefficient,final_up_spin_list,final_down_spin_list) 
         return final_state
