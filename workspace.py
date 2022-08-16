@@ -1,10 +1,9 @@
-import system
+import occupation_state
 import annihilation_operator 
 import creation_operator
 
 
 def setup_latex_file(f):
-    
     f.write(r"\documentclass{article}")
     f.write("\n")
     f.write(r"\usepackage[english]{babel}")
@@ -44,6 +43,21 @@ f = open(directory_to_latex_file+latex_filename, "w")
 setup_latex_file(f)
 
 # DO STUFF
+c_0_up = annihilation_operator.Annihilation_Operator(0,"up")
+
+#state
+coefficient_1 = 1
+up_spin_list_1 = []
+down_spin_list_1 = []
+state_1 = occupation_state.Occupation_State(coefficient_1,up_spin_list_1,down_spin_list_1)
+
+
+result = c_0_up.apply(state_1)
+print(result.coefficient)
+print(result.up_spin_list)
+print(result.down_spin_list)
+
+
 f.write("hiiiiiiii")
 
 close_latex_file(f)
