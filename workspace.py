@@ -35,6 +35,7 @@ def close_latex_file(f):
     f.close()
 
 def start_latex_equation(f):
+    f.write("\n")
     f.write(r"\begin{equation*}")
     f.write("\n")
     
@@ -66,17 +67,44 @@ def write_c(op):
     
 def write_up_operators_of_state(f,state):
     for index,number in enumerate(state.up_spin_list):
-        f.write(creation_operator.Creation_Operator(number,"up"))
+        write_c_dagger(creation_operator.Creation_Operator(number,"up"))
         
     
 def write_down_operators_of_state(f,state):
     for index,number in enumerate(state.down_spin_list):
-        f.write(creation_operator.Creation_Operator(number,"down"))
-
-
+        write_c_dagger(creation_operator.Creation_Operator(number,"down"))
     
 def write_equal_sign():
     f.write("=")
+    
+def write_equation_with_c_applied(f,c_operator,state,result):
+    start_latex_equation(f)
+    write_coefficient_of_state(f,state)
+    write_c(c_operator)
+    write_up_operators_of_state(f,state)
+    write_down_operators_of_state(f,state)
+    write_vacuum_state(f)
+    write_equal_sign()
+    write_coefficient_of_state(f,result)
+    write_up_operators_of_state(f,result)
+    write_down_operators_of_state(f,result)
+    write_vacuum_state(f)
+    end_latex_equation(f)
+
+def write_equation_with_c_dagger_applied(f,c_dagger_operator,state,result):
+    start_latex_equation(f)
+    write_coefficient_of_state(f,state)
+    write_c_dagger(c_dagger_operator)
+    write_up_operators_of_state(f,state)
+    write_down_operators_of_state(f,state)
+    write_vacuum_state(f)
+    write_equal_sign()
+    write_coefficient_of_state(f,result)
+    write_up_operators_of_state(f,result)
+    write_down_operators_of_state(f,result)
+    write_vacuum_state(f)
+    end_latex_equation(f)
+    
 
 
 directory_to_latex_file = "/Users/christinadaniel/Desktop/Christina_Desktop/latex_files/"
@@ -84,7 +112,9 @@ latex_filename = "main.tex"
 f = open(directory_to_latex_file+latex_filename, "w")
 setup_latex_file(f)
 
-# operator
+
+
+# c operator
 c_0_up = annihilation_operator.Annihilation_Operator(0,"up")
 
 # state
@@ -95,32 +125,18 @@ state_1 = occupation_state.Occupation_State(coefficient_1,up_spin_list_1,down_sp
 
 # result
 result_1 = c_0_up.apply(state_1)
-# print(result_1.coefficient)
-# print(result_1.up_spin_list)
-# print(result_1.down_spin_list)
 
-start_latex_equation(f)
+write_equation_with_c_applied(f,c_0_up,state_1,result_1)
+
+# c-dagger operator
+c_dagger_0_up = creation_operator.Creation_Operator(0,"up")
+
+# result
+result_2 = c_dagger_0_up.apply(state_1)
+
+write_equation_with_c_dagger_applied(f,c_dagger_0_up,state_1,result_2)
 
 
-
-write_coefficient_of_state(f,state_1)
-
-write_c(c_0_up)
-
-write_up_operators_of_state(f,state_1)
-write_down_operators_of_state(f,state_1)
-
-write_vacuum_state(f)
-
-write_equal_sign()
-
-write_coefficient_of_state(f,result_1)
-
-write_up_operators_of_state(f,result_1)
-write_down_operators_of_state(f,result_1)
-write_vacuum_state(f)
-
-end_latex_equation(f)
 
 
 
