@@ -15,7 +15,13 @@ Step 4: Run latex_file.py in Spyder.
 
 Step 5: If the ends of the molecule are connected, in the file called latex_file.py, set the boolean variable called connected_ends to True. Otherwise, set this boolean variable to False. 
 
-Step 6: Enter numerical parameters as prompted in the console.
+Step 6: Enter numerical parameters as prompted in the console. These numerical parameters are: 
+
+1) Number of sites/atoms
+2) Number of up-spin electrons
+3) Number of down-spin electrons
+4) Value of U for the Hubbard Hamiltonian operator
+5) Value of t for the Hubbard Hamiltonian operator
 
 Step 7: Compile the latex file called main.tex, to see the eigenstates and eigenvalues of the Hubbard Hamiltonian matrix.
 
