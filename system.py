@@ -2,10 +2,11 @@ import itertools
 import basis_state
 
 class System:
-    def __init__(self,number_of_sites,number_of_up_electrons,number_of_down_electrons):
+    def __init__(self,number_of_sites,number_of_up_electrons,number_of_down_electrons,connected_ends):
         self.number_of_sites = number_of_sites 
         self.number_of_up_electrons = number_of_up_electrons 
         self.number_of_down_electrons = number_of_down_electrons
+        self.connected_ends = connected_ends
     def get_up_spin_lists(self):
         all_lists = []
         objects =  itertools.combinations(range(self.number_of_sites),self.number_of_up_electrons)
