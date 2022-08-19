@@ -1,5 +1,6 @@
 # Python Code for Quantum Operations
 
+
 To Use:
 
 Step 1: Download each .py file.
@@ -11,6 +12,7 @@ Step 3: Run latex_file.py in Spyder, an application for editing and running pyth
 Step 4. Enter parameters as prompted in the console.
 
 Step 5. Compile the latex file called main.tex, to see the eigenstates and eigenvalues of the Hubbard Hamiltonian matrix.
+
 
 To Cite:
 
