@@ -1,5 +1,4 @@
 import occupation_state
-import creation_operator
 
 class Basis_State(occupation_state.Occupation_State):
     def __init__(self,coefficient,up_spin_list,down_spin_list):

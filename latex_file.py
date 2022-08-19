@@ -1,3 +1,5 @@
+import basis_state
+
 class Latex_File:
     directory_to_latex_file = "/Users/christinadaniel/Desktop/Christina_Desktop/latex_files/"
     def __init__(self,filename):
@@ -43,14 +45,14 @@ class Latex_File:
         self.f.write("=")
     
 
-    
-
-
-
 my_latex_file = Latex_File("main.tex")
 my_latex_file.setup_latex_file()
-# my_latex_file.start_latex_equation()
-# my_latex_file.end_latex_equation()
+my_latex_file.start_latex_equation()
+
+my_basis_state = basis_state.Basis_State(1,[],[])
+my_basis_state.write(my_latex_file.f)
+
+my_latex_file.end_latex_equation()
 my_latex_file.close_latex_file()
 
  

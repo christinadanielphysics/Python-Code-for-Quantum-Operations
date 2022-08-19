@@ -8,12 +8,12 @@ class Occupation_State(quantum_state.Quantum_State):
         self.down_spin_list = down_spin_list 
     def write_coefficient_of_state(self,f):
         f.write(str(self.coefficient))
-    def write_vacuum_state(f):
+    def write_vacuum_state(self,f):
         f.write("\ket{0}")
-    def write_up_operators_of_state(f,self):
+    def write_up_operators_of_state(self,f):
         for index,number in enumerate(self.up_spin_list):
             creation_operator.Creation_Operator(number,"up").write_c_dagger(f)
-    def write_down_operators_of_state(f,self):
+    def write_down_operators_of_state(self,f):
         for index,number in enumerate(self.down_spin_list):
             creation_operator.Creation_Operator(number,"down").write_c_dagger(f)
     def write(self,f):
