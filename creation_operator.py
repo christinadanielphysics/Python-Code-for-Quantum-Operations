@@ -27,11 +27,11 @@ class Creation_Operator:
             for extra_skips,number in enumerate(initial_up_spin_list):
                 if number == operator_numerical_index:
                     final_coefficient = 0 # annihilation
-                elif operator_numerical_index > number:
+                elif operator_numerical_index < number:
                     right_index = extra_skips
                     break
                 else:
-                    skips = skips + extra_skips
+                    skips = skips + 1
                     final_up_spin_list.append(number)
             if final_coefficient != 0:
                 final_coefficient = initial_coefficient * (-1)**skips
@@ -46,11 +46,11 @@ class Creation_Operator:
             for extra_skips,number in enumerate(initial_down_spin_list):
                 if number == operator_numerical_index:
                     final_coefficient = 0 # annihilation
-                elif operator_numerical_index > number:
+                elif operator_numerical_index < number:
                     right_index = extra_skips 
                     break
                 else:
-                    skips = skips + extra_skips 
+                    skips = skips + 1 
                     final_down_spin_list.append(number)
             if final_coefficient != 0:
                 final_coefficient = initial_coefficient * (-1)**skips

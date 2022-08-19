@@ -68,8 +68,7 @@ def write_c(op):
 def write_up_operators_of_state(f,state):
     for index,number in enumerate(state.up_spin_list):
         write_c_dagger(creation_operator.Creation_Operator(number,"up"))
-        
-    
+            
 def write_down_operators_of_state(f,state):
     for index,number in enumerate(state.down_spin_list):
         write_c_dagger(creation_operator.Creation_Operator(number,"down"))
@@ -115,12 +114,12 @@ setup_latex_file(f)
 
 
 # c operator
-c_0_up = annihilation_operator.Annihilation_Operator(0,"up")
+c_0_up = annihilation_operator.Annihilation_Operator(0,"down")
 
 # state
 coefficient_1 = 1
-up_spin_list_1 = []
-down_spin_list_1 = []
+up_spin_list_1 = [0]
+down_spin_list_1 = [0]
 state_1 = occupation_state.Occupation_State(coefficient_1,up_spin_list_1,down_spin_list_1)
 
 # result
@@ -129,12 +128,12 @@ result_1 = c_0_up.apply(state_1)
 write_equation_with_c_applied(f,c_0_up,state_1,result_1)
 
 # c-dagger operator
-c_dagger_0_up = creation_operator.Creation_Operator(0,"up")
+c_dagger_0_up = creation_operator.Creation_Operator(3,"down")
 
 # result
 result_2 = c_dagger_0_up.apply(state_1)
 
-write_equation_with_c_dagger_applied(f,c_dagger_0_up,state_1,result_2)
+#write_equation_with_c_dagger_applied(f,c_dagger_0_up,state_1,result_2)
 
 
 
