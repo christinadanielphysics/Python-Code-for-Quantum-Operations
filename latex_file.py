@@ -1,4 +1,4 @@
-import basis_state
+import system
 
 class Latex_File:
     directory_to_latex_file = "/Users/christinadaniel/Desktop/Christina_Desktop/latex_files/"
@@ -47,12 +47,13 @@ class Latex_File:
 
 my_latex_file = Latex_File("main.tex")
 my_latex_file.setup_latex_file()
-my_latex_file.start_latex_equation()
 
-my_basis_state = basis_state.Basis_State(1,[],[])
-my_basis_state.write(my_latex_file.f)
+sites = 2
+up_electrons = 1
+down_electrons = 1
+my_system = system.System(sites,up_electrons,down_electrons)
+my_system.print_basis_states(my_latex_file)
 
-my_latex_file.end_latex_equation()
 my_latex_file.close_latex_file()
 
  
