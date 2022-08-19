@@ -1,5 +1,6 @@
 import system
-import hubbard
+import lesser_green
+import matplotlib.pyplot as plt
 
 class Latex_File:
     directory_to_latex_file = "/Users/christinadaniel/Desktop/Christina_Desktop/latex_files/"
@@ -49,18 +50,25 @@ class Latex_File:
 my_latex_file = Latex_File("main.tex")
 my_latex_file.setup_latex_file()
 
-connected_ends = True # geometry of molecule
-
-sites = int(input("Number of sites? "))
-up_electrons = int(input("Number of up-spin electrons? "))
-down_electrons = int(input("Number of down-spin electrons? "))
 U_value = float(input("Value of U for Hubbard Hamiltonain operator? "))
 t_value = float(input("Value of t for Hubbard Hamiltonian operator? "))
 
-my_system = system.System(sites,up_electrons,down_electrons,connected_ends)
-my_hubbard = hubbard.Hubbard(U_value,t_value,my_system)
+connected_ends = True # geometry of molecule
+sites = int(input("Number of sites? "))
+up_electrons = int(input("Number of up-spin electrons? "))
+down_electrons = int(input("Number of down-spin electrons? "))
 
-my_hubbard.write_eigenvalues_and_eigenvectors(my_latex_file)
+system_with_n_electrons = system.System(sites,up_electrons,down_electrons,connected_ends)
+
+i = 0
+j = 0
+my_lesser = lesser_green.Lesser_Green("up",i,j,system_with_n_electrons,U_value,t_value)    
+angular_frequencies,weights = my_lesser.get_angular_frequencies_and_weights()
+print("angular frequencies:\n",angular_frequencies)
+print("weights:\n",weights)
+plt.figure(1)
+plt.scatter(angular_frequencies,weights)
+plt.show()
 
 my_latex_file.close_latex_file()
 

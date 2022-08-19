@@ -31,5 +31,6 @@ class Occupation_State(quantum_state.Quantum_State):
         for index,state in enumerate(list_of_states):
             number = number + self.scalar_product(state)
         return number
+
             
         

@@ -67,7 +67,7 @@ class Hubbard:
         hamiltonian_matrix = numpy.add(self.form_kinetic_matrix(),self.form_interaction_matrix())
         print("hamiltonian matrix:\n",hamiltonian_matrix)
         return hamiltonian_matrix
-    def diagonalize_Hamiltonian_matrix(self):
+    def diagonalize_hamiltonian_matrix(self):
         eigenvalues,eigenvectors = LA.eigh(self.form_hamiltonian_matrix())
         return eigenvalues,eigenvectors
     def write_eigenvalues_and_eigenvectors(self,my_latex_file):
