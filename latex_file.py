@@ -49,15 +49,17 @@ class Latex_File:
 my_latex_file = Latex_File("main.tex")
 my_latex_file.setup_latex_file()
 
-sites = 2
-up_electrons = 1
-down_electrons = 1
-connected_ends = True
-my_system = system.System(sites,up_electrons,down_electrons,connected_ends)
+connected_ends = True # geometry of molecule
 
-U_value = 1
-t_value = 1
+sites = int(input("Number of sites? "))
+up_electrons = int(input("Number of up-spin electrons? "))
+down_electrons = int(input("Number of down-spin electrons? "))
+U_value = float(input("Value of U for Hubbard Hamiltonain operator? "))
+t_value = float(input("Value of t for Hubbard Hamiltonian operator? "))
+
+my_system = system.System(sites,up_electrons,down_electrons,connected_ends)
 my_hubbard = hubbard.Hubbard(U_value,t_value,my_system)
+
 my_hubbard.write_eigenvalues_and_eigenvectors(my_latex_file)
 
 my_latex_file.close_latex_file()
