@@ -73,7 +73,7 @@ class Hubbard:
     def write_eigenvalues_and_eigenvectors(self,my_latex_file):
         eigenvalues,eigenvectors = self.diagonalize_Hamiltonian_matrix()
         for i,eigenvalue in enumerate(eigenvalues):
-            my_latex_file.f.write("Eigenvalue $="+str(eigenvalue)+"$")
+            my_latex_file.f.write("Eigenvalue $="+str(round(eigenvalue,3))+"$")
             eigenvector = eigenvectors[:,i]
             my_latex_file.start_latex_equation()
             for row,basis_state in enumerate(self.basis_states):
@@ -84,7 +84,7 @@ class Hubbard:
     def write_ground_state_eigenvalue_and_eigenvector(self,my_latex_file):
         eigenvalues,eigenvectors = self.diagonalize_Hamiltonian_matrix()
         ground_state_eigenvalue = eigenvalues[0]
-        my_latex_file.f.write("Eigenvalue $="+str(ground_state_eigenvalue)+"$")
+        my_latex_file.f.write("Eigenvalue $="+str(round(ground_state_eigenvalue,3))+"$")
         eigenvector = eigenvectors[:,0]
         my_latex_file.start_latex_equation()
         for row,basis_state in enumerate(self.basis_states):
