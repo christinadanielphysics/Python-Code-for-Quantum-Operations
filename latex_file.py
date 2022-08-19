@@ -49,7 +49,7 @@ my_latex_file = Latex_File("main.tex")
 my_latex_file.setup_latex_file()
 
 sites = 2
-up_electrons = 1
+up_electrons = 0
 down_electrons = 1
 my_system = system.System(sites,up_electrons,down_electrons)
 my_system.print_basis_states(my_latex_file)
