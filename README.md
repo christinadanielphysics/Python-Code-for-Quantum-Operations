@@ -13,9 +13,11 @@ Step 3: In latex_file.py, update the variable called directory_to_latex_file. Th
 
 Step 4: Run latex_file.py in Spyder.
 
-Step 5. Enter numerical parameters as prompted in the console.
+Step 5: If the ends of the molecule are connected, in the file called latex_file.py, set the boolean variable called connected_ends to True. Otherwise, set this boolean variable to False. 
 
-Step 6. Compile the latex file called main.tex, to see the eigenstates and eigenvalues of the Hubbard Hamiltonian matrix.
+Step 6: Enter numerical parameters as prompted in the console.
+
+Step 7: Compile the latex file called main.tex, to see the eigenstates and eigenvalues of the Hubbard Hamiltonian matrix.
 
 To cite this software:
 
