@@ -23,5 +23,9 @@ class Occupation_State(quantum_state.Quantum_State):
         self.write_down_operators_of_state(my_latex_file.f)
         self.write_vacuum_state(my_latex_file.f)
         my_latex_file.end_latex_equation()
-
+    def scalar_product(self,other):
+        if self.up_spin_list == other.up_spin_list and self.down_spin_list == other.down_spin_list:
+            return self.coefficient * other.coefficient
+        else:
+            return 0
         
