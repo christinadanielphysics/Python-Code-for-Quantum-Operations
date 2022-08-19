@@ -28,4 +28,10 @@ class Occupation_State(quantum_state.Quantum_State):
             return self.coefficient * other.coefficient
         else:
             return 0
+    def scalar_product_with_list_of_states(self,list_of_states):
+        number = 0
+        for index,state in enumerate(list_of_states):
+            number = number + self.scalar_product(state)
+        return number
+            
         

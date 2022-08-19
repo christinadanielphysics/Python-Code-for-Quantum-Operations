@@ -7,6 +7,7 @@ class System:
         self.number_of_up_electrons = number_of_up_electrons 
         self.number_of_down_electrons = number_of_down_electrons
         self.connected_ends = connected_ends
+        self.spin_options = ["up","down"]
     def get_up_spin_lists(self):
         all_lists = []
         objects =  itertools.combinations(range(self.number_of_sites),self.number_of_up_electrons)
