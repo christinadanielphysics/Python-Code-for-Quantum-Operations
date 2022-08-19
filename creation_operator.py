@@ -62,3 +62,10 @@ class Creation_Operator:
         
         final_state = occupation_state.Occupation_State(final_coefficient,final_up_spin_list,final_down_spin_list)
         return final_state
+    def write_c_dagger(self,f):
+        spin_symbol = 0
+        if self.spin == "up":
+            spin_symbol = r"\uparrow"
+        else:
+            spin_symbol = r"\downarrow"
+        f.write("\hat{c}^\dag_{"+str(self.numerical_index)+spin_symbol+"}")
