@@ -1,4 +1,5 @@
 import system
+import hubbard
 
 class Latex_File:
     directory_to_latex_file = "/Users/christinadaniel/Desktop/Christina_Desktop/latex_files/"
@@ -49,11 +50,15 @@ my_latex_file = Latex_File("main.tex")
 my_latex_file.setup_latex_file()
 
 sites = 2
-up_electrons = 0
+up_electrons = 1
 down_electrons = 1
 connected_ends = True
 my_system = system.System(sites,up_electrons,down_electrons,connected_ends)
-my_system.print_basis_states(my_latex_file)
+
+U_value = 1
+t_value = 1
+my_hubbard = hubbard.Hubbard(U_value,t_value,my_system)
+my_hubbard.write_eigenvalues_and_eigenvectors(my_latex_file)
 
 my_latex_file.close_latex_file()
 

@@ -1,6 +1,7 @@
 import annihilation_operator
 import creation_operator
 import numpy
+from numpy import linalg as LA
 
 class Hubbard:
     def __init__(self,U,t,system):
@@ -16,6 +17,7 @@ class Hubbard:
                 if self.connected_ends == True:
                     if abs(i-j) == self.V-1:
                         self.hopping_matrix[i][j] = t
+        print("hopping matrix:\n",self.hopping_matrix)
         self.spin_options = system.spin_options
         self.basis_states = system.get_basis_states()
         self.dimension = len(self.basis_states)
@@ -51,6 +53,7 @@ class Hubbard:
             for col,left_basis_state in enumerate(self.basis_states):
                 list_of_states = self.apply_kinetic_operator(right_basis_state)
                 kinetic_matrix[row][col] = left_basis_state.scalar_product_with_list_of_states(list_of_states)
+        print("kinetic matrix:\n",kinetic_matrix)
         return kinetic_matrix
     def form_interaction_matrix(self):
         interaction_matrix = numpy.zeros((self.dimension,self.dimension))
@@ -58,15 +61,34 @@ class Hubbard:
             for col,left_basis_state in enumerate(self.basis_states):
                 list_of_states = self.apply_interaction_operator(right_basis_state)
                 interaction_matrix[row][col] = left_basis_state.scalar_product_with_list_of_states(list_of_states)
+        print("interaction matrix:\n",interaction_matrix)
         return interaction_matrix
-    def form_Hamiltonian_matrix(self):
-        return numpy.add(self.form_kinetic_matrix(),self.form_interaction_matrix())
+    def form_hamiltonian_matrix(self):
+        hamiltonian_matrix = numpy.add(self.form_kinetic_matrix(),self.form_interaction_matrix())
+        print("hamiltonian matrix:\n",hamiltonian_matrix)
+        return hamiltonian_matrix
     def diagonalize_Hamiltonian_matrix(self):
-        # CODE GOES HERE
-        pass
-    def write_eigenvalues_and_eigenvectors(self):
-        # CODE GOES HERE
-        pass
-    def write_ground_state_eigenvalue_and_eigenvector(self):
-        # CODE GOES HERE
-        pass
+        eigenvalues,eigenvectors = LA.eigh(self.form_hamiltonian_matrix())
+        return eigenvalues,eigenvectors
+    def write_eigenvalues_and_eigenvectors(self,my_latex_file):
+        eigenvalues,eigenvectors = self.diagonalize_Hamiltonian_matrix()
+        for i,eigenvalue in enumerate(eigenvalues):
+            my_latex_file.f.write("Eigenvalue $="+str(eigenvalue)+"$")
+            eigenvector = eigenvectors[:,i]
+            my_latex_file.start_latex_equation()
+            for row,basis_state in enumerate(self.basis_states):
+                my_latex_file.f.write("+")
+                my_latex_file.f.write(str(round(eigenvector[row],3)))
+                basis_state.write(my_latex_file)
+            my_latex_file.end_latex_equation()   
+    def write_ground_state_eigenvalue_and_eigenvector(self,my_latex_file):
+        eigenvalues,eigenvectors = self.diagonalize_Hamiltonian_matrix()
+        ground_state_eigenvalue = eigenvalues[0]
+        my_latex_file.f.write("Eigenvalue $="+str(ground_state_eigenvalue)+"$")
+        eigenvector = eigenvectors[:,0]
+        my_latex_file.start_latex_equation()
+        for row,basis_state in enumerate(self.basis_states):
+            my_latex_file.f.write("+")
+            my_latex_file.f.write(str(round(eigenvector[row],3)))
+            basis_state.write(my_latex_file)
+        my_latex_file.end_latex_equation()
