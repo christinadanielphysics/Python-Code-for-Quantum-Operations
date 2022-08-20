@@ -1,5 +1,6 @@
 import system
 import lesser_green
+import greater_green
 import matplotlib.pyplot as plt
 
 class Latex_File:
@@ -61,13 +62,15 @@ down_electrons = int(input("Number of down-spin electrons? "))
 system_with_n_electrons = system.System(sites,up_electrons,down_electrons,connected_ends)
 
 i = 0
-j = 0
-my_lesser = lesser_green.Lesser_Green("up",i,j,system_with_n_electrons,U_value,t_value)    
-angular_frequencies,weights = my_lesser.get_angular_frequencies_and_weights()
-print("angular frequencies:\n",angular_frequencies)
-print("weights:\n",weights)
+j = 1
+my_lesser = lesser_green.Lesser_Green("up",i,j,system_with_n_electrons,U_value,t_value)
+my_greater = greater_green.Greater_Green("up",i,j,system_with_n_electrons,U_value,t_value) 
+lesser_angular_frequencies,lesser_weights = my_lesser.get_angular_frequencies_and_weights()
+greater_angular_frequencies,greater_weights = my_greater.get_angular_frequencies_and_weights()
 plt.figure(1)
-plt.scatter(angular_frequencies,weights)
+plt.scatter(lesser_angular_frequencies,lesser_weights,c='blue')
+plt.scatter(greater_angular_frequencies,greater_weights,c='red')
+plt.xlim([-3,3])
 plt.show()
 
 my_latex_file.close_latex_file()

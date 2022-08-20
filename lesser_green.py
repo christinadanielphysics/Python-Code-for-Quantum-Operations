@@ -28,6 +28,7 @@ class Lesser_Green:
         eigenvalues_n,eigenvectors_n = self.get_eigenstates_for_n_electrons()
         ground_state_energy_n = eigenvalues_n[0]
         ground_state_n = eigenvectors_n[:,0]
+        
         eigenvalues_n_minus_one,eigenvectors_n_minus_one = self.get_eigenstates_for_n_minus_one_electrons()
         basis_n = self.system_n.get_basis_states()
         basis_n_minus_one = self.system_n_minus_one.get_basis_states()

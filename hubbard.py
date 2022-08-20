@@ -7,6 +7,8 @@ class Hubbard:
     def __init__(self,U,t,system):
         self.U = U
         self.t = t
+        self.mu = U * 0.5
+        self.number_of_electrons = system.number_of_electrons
         self.V = system.number_of_sites
         self.hopping_matrix = numpy.zeros((self.V,self.V))
         self.connected_ends = system.connected_ends
@@ -61,6 +63,8 @@ class Hubbard:
             for col,left_basis_state in enumerate(self.basis_states):
                 list_of_states = self.apply_interaction_operator(right_basis_state)
                 interaction_matrix[row][col] = left_basis_state.scalar_product_with_list_of_states(list_of_states)
+                if row==col:
+                    interaction_matrix[row][col] = interaction_matrix[row][col] - self.mu * self.number_of_electrons
         print("interaction matrix:\n",interaction_matrix)
         return interaction_matrix
     def form_hamiltonian_matrix(self):
