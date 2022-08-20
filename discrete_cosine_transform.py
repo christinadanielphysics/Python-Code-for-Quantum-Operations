@@ -18,4 +18,4 @@ class Discrete_Cosine_Transform:
         angular_frequency_values = numpy.linspace(start=0,stop=stop_value,num=self.number_of_samples,endpoint=True,retstep=False)
         return angular_frequency_values
     def get_dct(self,signal_in_time):
-        return fft_from_scipy.dct(signal_in_time)
+        return fft_from_scipy.dct(signal_in_time)/self.number_of_samples/2
