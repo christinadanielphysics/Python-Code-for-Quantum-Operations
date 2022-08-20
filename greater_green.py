@@ -3,6 +3,7 @@ import system
 import creation_operator
 import annihilation_operator
 import occupation_state
+import math
 
 class Greater_Green:
     def __init__(self,spin,i,j,system_n,U_value,t_value):
@@ -15,65 +16,71 @@ class Greater_Green:
         self.t_value = t_value
         self.c_operator = annihilation_operator.Annihilation_Operator(self.i,self.spin)
         self.c_dagger_operator = creation_operator.Creation_Operator(self.j,self.spin)
-    def get_eigenstates_for_n_electrons(self):
+        
         hubbard_n = hubbard.Hubbard(self.U_value,self.t_value,self.system_n)
-        eigenvalues,eigenvectors = hubbard_n.diagonalize_hamiltonian_matrix()
-        return eigenvalues,eigenvectors
-    def get_eigenstates_for_n_plus_one_electrons(self):
+        eigenvalues_n,eigenvectors_n = hubbard_n.diagonalize_hamiltonian_matrix()
+
         hubbard_n_plus_one = hubbard.Hubbard(self.U_value,self.t_value,self.system_n_plus_one)
-        eigenvalues,eigenvectors = hubbard_n_plus_one.diagonalize_hamiltonian_matrix()
-        return eigenvalues,eigenvectors
-    def get_angular_frequencies_and_weights(self):
-        eigenvalues_n,eigenvectors_n = self.get_eigenstates_for_n_electrons()
-        ground_state_energy_n = eigenvalues_n[0]
-        ground_state_n = eigenvectors_n[:,0]
+        eigenvalues_n_plus_one,eigenvectors_n_plus_one = hubbard_n_plus_one.diagonalize_hamiltonian_matrix()
         
-        eigenvalues_n_plus_one,eigenvectors_n_plus_one = self.get_eigenstates_for_n_plus_one_electrons()
-        basis_n = self.system_n.get_basis_states()
-        basis_n_plus_one = self.system_n_plus_one.get_basis_states()
+        self.eigenvalues_n = eigenvalues_n
+        self.eigenvectors_n = eigenvectors_n
         
-        # CODE GOES HERE
+        self.eigenvalues_n_plus_one = eigenvalues_n_plus_one
+        self.eigenvectors_n_plus_one = eigenvectors_n_plus_one
         
+        self.ground_state_energy_n = eigenvalues_n[0]
+        self.ground_state_n = eigenvectors_n[:,0]
+        
+        self.basis_n = self.system_n.get_basis_states()
+        self.basis_n_plus_one = self.system_n_plus_one.get_basis_states()
+    def c_dagger_bracket(self,a):
+        left_occupation_states_n_plus_one = []
+        for index,coefficient_from_eigenstate in enumerate(self.eigenvectors_n_plus_one[:,a]):
+            occupation_state_from_eigenstate = occupation_state.Occupation_State(coefficient_from_eigenstate,self.basis_n_plus_one[index].up_spin_list,self.basis_n_plus_one[index].down_spin_list)
+            left_occupation_states_n_plus_one.append(occupation_state_from_eigenstate)
         right_occupation_states_n = []
-        for index,coefficient_from_ground_state in enumerate(ground_state_n):
-            occupation_state_from_ground_state = occupation_state.Occupation_State(coefficient_from_ground_state,basis_n[index].up_spin_list,basis_n[index].down_spin_list)
+        for index,coefficient_from_ground_state in enumerate(self.ground_state_n):
+            occupation_state_from_ground_state = occupation_state.Occupation_State(coefficient_from_ground_state,self.basis_n[index].up_spin_list,self.basis_n[index].down_spin_list)
             right_occupation_states_n.append(self.c_dagger_operator.apply(occupation_state_from_ground_state))
-        
+        bracket_1 = 0
+        for right_index,right_state in enumerate(right_occupation_states_n):
+            for left_index,left_state in enumerate(left_occupation_states_n_plus_one):
+                bracket_1 = bracket_1 + right_state.scalar_product(left_state)
+        return bracket_1
+    def c_bracket(self,a):
+        right_occupation_states_n_plus_one = []
+        for index,coefficient_from_eigenstate in enumerate(self.eigenvectors_n_plus_one[:,a]):
+            occupation_state_from_eigenstate = occupation_state.Occupation_State(coefficient_from_eigenstate,self.basis_n_plus_one[index].up_spin_list,self.basis_n_plus_one[index].down_spin_list)
+            result = self.c_operator.apply(occupation_state_from_eigenstate)
+            right_occupation_states_n_plus_one.append(result)
         left_occupation_states_n = []
-        for index,coefficient_from_ground_state in enumerate(ground_state_n):
-            occupation_state_from_ground_state = occupation_state.Occupation_State(coefficient_from_ground_state,basis_n[index].up_spin_list,basis_n[index].down_spin_list)
+        for index,coefficient_from_ground_state in enumerate(self.ground_state_n):
+            occupation_state_from_ground_state = occupation_state.Occupation_State(coefficient_from_ground_state,self.basis_n[index].up_spin_list,self.basis_n[index].down_spin_list)
             left_occupation_states_n.append(occupation_state_from_ground_state)
-                
+        bracket_2 = 0
+        for right_index,right_state in enumerate(right_occupation_states_n_plus_one):
+            for left_index,left_state in enumerate(left_occupation_states_n):
+                bracket_2 = bracket_2 + right_state.scalar_product(left_state)
+        return bracket_2
+    def get_angular_frequencies_and_weights(self):
         angular_frequencies = []
         weights = []
-        for a,n_plus_one_eigenvalue_a in enumerate(eigenvalues_n_plus_one):
-            angular_frequencies.append(n_plus_one_eigenvalue_a - ground_state_energy_n)
-            
-            left_occupation_states_n_plus_one = []
-            for index,coefficient_from_eigenstate in enumerate(eigenvectors_n_plus_one[:,a]):
-                occupation_state_from_eigenstate = occupation_state.Occupation_State(coefficient_from_eigenstate,basis_n_plus_one[index].up_spin_list,basis_n_plus_one[index].down_spin_list)
-                left_occupation_states_n_plus_one.append(occupation_state_from_eigenstate)
-                
-            right_occupation_states_n_plus_one = []
-            for index,coefficient_from_eigenstate in enumerate(eigenvectors_n_plus_one[:,a]):
-                occupation_state_from_eigenstate = occupation_state.Occupation_State(coefficient_from_eigenstate,basis_n_plus_one[index].up_spin_list,basis_n_plus_one[index].down_spin_list)
-                result = self.c_operator.apply(occupation_state_from_eigenstate)
-                right_occupation_states_n_plus_one.append(result)
-            
-            bracket_1 = 0
-            for right_index,right_state in enumerate(right_occupation_states_n):
-                for left_index,left_state in enumerate(left_occupation_states_n_plus_one):
-                    bracket_1 = bracket_1 + right_state.scalar_product(left_state)
-    
-            bracket_2 = 0
-            for right_index,right_state in enumerate(right_occupation_states_n_plus_one):
-                for left_index,left_state in enumerate(left_occupation_states_n):
-                    bracket_2 = bracket_2 + right_state.scalar_product(left_state)
-                
-            weight = bracket_1 * bracket_2 
-            weights.append(weight)
-            
+        for a,n_plus_one_eigenvalue_a in enumerate(self.eigenvalues_n_plus_one):
+            angular_frequencies.append(n_plus_one_eigenvalue_a - self.ground_state_energy_n)
+            bracket_1 = self.c_dagger_bracket(a)
+            bracket_2 = self.c_bracket(a)
+            weights.append(bracket_1 * bracket_2)
         return angular_frequencies,weights
-    def get_time_version(self):
-        # CODE GOES HERE
-        pass
+    def get_time_version(self,time_values):
+        function_values = []
+        for time_index,t_value in enumerate(time_values):
+            function_value = 0
+            for a,n_plus_one_eigenvalue_a in enumerate(self.eigenvalues_n_plus_one):
+                bracket_1 = self.c_dagger_bracket(a)
+                bracket_2 = self.c_bracket(a)
+                function_value = function_value + bracket_1 * bracket_2 * math.cos( (self.ground_state_energy_n - n_plus_one_eigenvalue_a) * t_value )
+            function_values.append(function_value)
+        return function_values
+
+       

@@ -2,6 +2,7 @@ import system
 import lesser_green
 import greater_green
 import matplotlib.pyplot as plt
+import numpy
 
 class Latex_File:
     directory_to_latex_file = "/Users/christinadaniel/Desktop/Christina_Desktop/latex_files/"
@@ -62,15 +63,27 @@ down_electrons = int(input("Number of down-spin electrons? "))
 system_with_n_electrons = system.System(sites,up_electrons,down_electrons,connected_ends)
 
 i = 0
-j = 1
+j = 0
+
+number_of_time_points = 2**8
+start_time = -5
+stop_time = 5
+time_values = numpy.linspace(start_time, stop_time, num=number_of_time_points, endpoint=True, retstep=False)
+
 my_lesser = lesser_green.Lesser_Green("up",i,j,system_with_n_electrons,U_value,t_value)
 my_greater = greater_green.Greater_Green("up",i,j,system_with_n_electrons,U_value,t_value) 
+
 lesser_angular_frequencies,lesser_weights = my_lesser.get_angular_frequencies_and_weights()
 greater_angular_frequencies,greater_weights = my_greater.get_angular_frequencies_and_weights()
+lesser_time_version = my_lesser.get_time_version(time_values)
+greater_time_version = my_greater.get_time_version(time_values)
 plt.figure(1)
-plt.scatter(lesser_angular_frequencies,lesser_weights,c='blue')
-plt.scatter(greater_angular_frequencies,greater_weights,c='red')
-plt.xlim([-3,3])
+plt.scatter(lesser_angular_frequencies,lesser_weights,c='black')
+plt.scatter(greater_angular_frequencies,greater_weights,c='black')
+plt.show()
+plt.figure(2)
+plt.scatter(time_values,lesser_time_version,c='blue',s=10)
+plt.scatter(time_values,greater_time_version,c='red',s=5)
 plt.show()
 
 my_latex_file.close_latex_file()
