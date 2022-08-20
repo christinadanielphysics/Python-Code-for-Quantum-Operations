@@ -1,8 +1,11 @@
 import system
 import lesser_green
 import greater_green
-import matplotlib.pyplot as plt
 import numpy
+import discrete_cosine_transform
+import math
+import matplotlib.pyplot as plt
+
 
 class Latex_File:
     directory_to_latex_file = "/Users/christinadaniel/Desktop/Christina_Desktop/latex_files/"
@@ -65,26 +68,33 @@ system_with_n_electrons = system.System(sites,up_electrons,down_electrons,connec
 i = 0
 j = 0
 
-number_of_time_points = 2**8
-start_time = -5
+number_of_samples = 2**8
+start_time = 0
 stop_time = 5
-time_values = numpy.linspace(start_time, stop_time, num=number_of_time_points, endpoint=True, retstep=False)
 
-my_lesser = lesser_green.Lesser_Green("up",i,j,system_with_n_electrons,U_value,t_value)
-my_greater = greater_green.Greater_Green("up",i,j,system_with_n_electrons,U_value,t_value) 
+dct_object = discrete_cosine_transform.Discrete_Cosine_Transform(start_time,stop_time,number_of_samples)
 
-lesser_angular_frequencies,lesser_weights = my_lesser.get_angular_frequencies_and_weights()
-greater_angular_frequencies,greater_weights = my_greater.get_angular_frequencies_and_weights()
-lesser_time_version = my_lesser.get_time_version(time_values)
-greater_time_version = my_greater.get_time_version(time_values)
+time_values,time_step = numpy.linspace(start_time,stop_time,num=number_of_samples,endpoint=False,retstep=True)
+sample_signal = numpy.cos(time_values*2*math.pi*3) + numpy.cos(time_values*2*math.pi*7)
+
+frequency_values = dct_object.get_frequency_values()
 plt.figure(1)
-plt.scatter(lesser_angular_frequencies,lesser_weights,c='black')
-plt.scatter(greater_angular_frequencies,greater_weights,c='black')
+plt.plot(frequency_values,dct_object.get_dct(sample_signal))
+plt.xlim([0,10])
 plt.show()
-plt.figure(2)
-plt.scatter(time_values,lesser_time_version,c='blue',s=10)
-plt.scatter(time_values,greater_time_version,c='red',s=5)
-plt.show()
+
+
+# my_lesser = lesser_green.Lesser_Green("up",i,j,system_with_n_electrons,U_value,t_value)
+# my_greater = greater_green.Greater_Green("up",i,j,system_with_n_electrons,U_value,t_value) 
+
+# lesser_angular_frequencies,lesser_weights = my_lesser.get_angular_frequencies_and_weights()
+# greater_angular_frequencies,greater_weights = my_greater.get_angular_frequencies_and_weights()
+
+
+# lesser_time_version = my_lesser.get_time_version(time_values)
+# greater_time_version = my_greater.get_time_version(time_values)
+
+
 
 my_latex_file.close_latex_file()
 
