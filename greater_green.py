@@ -34,17 +34,25 @@ class Greater_Green:
         
         self.basis_n = self.system_n.get_basis_states()
         self.basis_n_plus_one = self.system_n_plus_one.get_basis_states()
+        
+        left_occupation_states_n = []
+        for index,coefficient_from_ground_state in enumerate(self.ground_state_n):
+            occupation_state_from_ground_state = occupation_state.Occupation_State(coefficient_from_ground_state,self.basis_n[index].up_spin_list,self.basis_n[index].down_spin_list)
+            left_occupation_states_n.append(occupation_state_from_ground_state)
+        self.left_occupation_states_n = left_occupation_states_n
+        
+        right_occupation_states_n = []
+        for index,coefficient_from_ground_state in enumerate(self.ground_state_n):
+            occupation_state_from_ground_state = occupation_state.Occupation_State(coefficient_from_ground_state,self.basis_n[index].up_spin_list,self.basis_n[index].down_spin_list)
+            right_occupation_states_n.append(self.c_dagger_operator.apply(occupation_state_from_ground_state))
+        self.right_occupation_states_n= right_occupation_states_n
     def c_dagger_bracket(self,a):
         left_occupation_states_n_plus_one = []
         for index,coefficient_from_eigenstate in enumerate(self.eigenvectors_n_plus_one[:,a]):
             occupation_state_from_eigenstate = occupation_state.Occupation_State(coefficient_from_eigenstate,self.basis_n_plus_one[index].up_spin_list,self.basis_n_plus_one[index].down_spin_list)
             left_occupation_states_n_plus_one.append(occupation_state_from_eigenstate)
-        right_occupation_states_n = []
-        for index,coefficient_from_ground_state in enumerate(self.ground_state_n):
-            occupation_state_from_ground_state = occupation_state.Occupation_State(coefficient_from_ground_state,self.basis_n[index].up_spin_list,self.basis_n[index].down_spin_list)
-            right_occupation_states_n.append(self.c_dagger_operator.apply(occupation_state_from_ground_state))
         bracket_1 = 0
-        for right_index,right_state in enumerate(right_occupation_states_n):
+        for right_index,right_state in enumerate(self.right_occupation_states_n):
             for left_index,left_state in enumerate(left_occupation_states_n_plus_one):
                 bracket_1 = bracket_1 + right_state.scalar_product(left_state)
         return bracket_1
@@ -54,13 +62,9 @@ class Greater_Green:
             occupation_state_from_eigenstate = occupation_state.Occupation_State(coefficient_from_eigenstate,self.basis_n_plus_one[index].up_spin_list,self.basis_n_plus_one[index].down_spin_list)
             result = self.c_operator.apply(occupation_state_from_eigenstate)
             right_occupation_states_n_plus_one.append(result)
-        left_occupation_states_n = []
-        for index,coefficient_from_ground_state in enumerate(self.ground_state_n):
-            occupation_state_from_ground_state = occupation_state.Occupation_State(coefficient_from_ground_state,self.basis_n[index].up_spin_list,self.basis_n[index].down_spin_list)
-            left_occupation_states_n.append(occupation_state_from_ground_state)
         bracket_2 = 0
         for right_index,right_state in enumerate(right_occupation_states_n_plus_one):
-            for left_index,left_state in enumerate(left_occupation_states_n):
+            for left_index,left_state in enumerate(self.left_occupation_states_n):
                 bracket_2 = bracket_2 + right_state.scalar_product(left_state)
         return bracket_2
     def get_angular_frequencies_and_weights(self):
