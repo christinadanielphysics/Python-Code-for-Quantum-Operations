@@ -69,7 +69,7 @@ system_with_n_electrons = system.System(sites,up_electrons,down_electrons,connec
 number_of_samples = 2**6
 number_of_random_samples = number_of_samples
 start_time = 0
-stop_time = 6
+stop_time = 12.2
 time_values = numpy.linspace(start_time,stop_time,num=number_of_samples,endpoint=True,retstep=False)
 
 i = 0
@@ -84,7 +84,7 @@ greater_time_version = my_greater.get_time_version(time_values)
 
 
 
-threshold = 0.01
+threshold = 0 # MAY NEED TO ADJUST
 
 greater_compressive_object = compressive_sensing.Compressive_Sensing(start_time,stop_time,number_of_samples,greater_time_version,threshold,"greater")
 greater_compressive, greater_compressive_angular_frequency_values = greater_compressive_object.get_transformed_signal(number_of_random_samples)
@@ -93,8 +93,8 @@ lesser_compressive_object = compressive_sensing.Compressive_Sensing(start_time,s
 lesser_compressive, lesser_compressive_angular_frequency_values = lesser_compressive_object.get_transformed_signal(number_of_random_samples)
 
 plt.figure(1)
-plt.plot(time_values,greater_time_version,c='red',linewidth=10)
-plt.plot(time_values,lesser_time_version,c='pink',linewidth=5)
+plt.plot(time_values,greater_time_version,c='black',linewidth=10)
+plt.plot(time_values,lesser_time_version,c='crimson',linewidth=5)
 plt.show()
 
 
@@ -103,7 +103,6 @@ plt.scatter(greater_compressive_angular_frequency_values,greater_compressive,c='
 plt.scatter(greater_angular_frequencies,greater_weights,c='blue',s=10)
 plt.scatter(lesser_compressive_angular_frequency_values,lesser_compressive,c='orange',s=20)
 plt.scatter(lesser_angular_frequencies,lesser_weights,c='green',s=10)
-plt.xlim([-5,5])
 plt.show()
 
 
