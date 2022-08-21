@@ -5,6 +5,7 @@ import annihilation_operator
 import occupation_state
 import math
 
+
 class Greater_Green:
     def __init__(self,spin,i,j,system_n,U_value,t_value):
         self.spin = spin

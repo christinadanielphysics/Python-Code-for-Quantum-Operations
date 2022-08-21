@@ -84,6 +84,6 @@ class Lesser_Green:
             for a,n_minus_one_eigenvalue_a in enumerate(self.eigenvalues_n_minus_one):
                 bracket_1 = self.c_bracket(a)
                 bracket_2 = self.c_dagger_bracket(a)
-                function_value = function_value + bracket_1 * bracket_2 * math.cos( (self.ground_state_energy_n - n_minus_one_eigenvalue_a) * t_value )
+                function_value = function_value + bracket_1 * bracket_2 * math.cos( (n_minus_one_eigenvalue_a - self.ground_state_energy_n) * t_value )
             function_values.append(function_value)
         return function_values
