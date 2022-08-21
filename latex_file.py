@@ -66,14 +66,14 @@ down_electrons = int(input("Number of down-spin electrons? "))
 
 system_with_n_electrons = system.System(sites,up_electrons,down_electrons,connected_ends)
 
-number_of_samples = 2**6
+number_of_samples = 2**7
 number_of_random_samples = number_of_samples
 start_time = 0
-stop_time = 12.2
+stop_time = 50
 time_values = numpy.linspace(start_time,stop_time,num=number_of_samples,endpoint=True,retstep=False)
 
 i = 0
-j = 1
+j = 0
 my_lesser = lesser_green.Lesser_Green("up",i,j,system_with_n_electrons,U_value,t_value)
 my_greater = greater_green.Greater_Green("up",i,j,system_with_n_electrons,U_value,t_value) 
 lesser_angular_frequencies,lesser_weights = my_lesser.get_angular_frequencies_and_weights()
@@ -84,7 +84,7 @@ greater_time_version = my_greater.get_time_version(time_values)
 
 
 
-threshold = 0 # MAY NEED TO ADJUST
+threshold = 0
 
 greater_compressive_object = compressive_sensing.Compressive_Sensing(start_time,stop_time,number_of_samples,greater_time_version,threshold,"greater")
 greater_compressive, greater_compressive_angular_frequency_values = greater_compressive_object.get_transformed_signal(number_of_random_samples)
@@ -92,17 +92,27 @@ greater_compressive, greater_compressive_angular_frequency_values = greater_comp
 lesser_compressive_object = compressive_sensing.Compressive_Sensing(start_time,stop_time,number_of_samples,lesser_time_version,threshold,"lesser")
 lesser_compressive, lesser_compressive_angular_frequency_values = lesser_compressive_object.get_transformed_signal(number_of_random_samples)
 
+greater_dct_object = discrete_cosine_transform.Discrete_Cosine_Transform(start_time,stop_time,number_of_samples,greater_time_version)
+greater_dct = greater_dct_object.get_dct()
+greater_dct_angular_frequencies  = greater_dct_object.get_angular_frequency_values()
+
+lesser_dct_object = discrete_cosine_transform.Discrete_Cosine_Transform(start_time,stop_time,number_of_samples,lesser_time_version)
+lesser_dct = lesser_dct_object.get_dct()
+lesser_dct_angular_frequencies  = lesser_dct_object.get_angular_frequency_values()
+
 plt.figure(1)
-plt.plot(time_values,greater_time_version,c='black',linewidth=10)
-plt.plot(time_values,lesser_time_version,c='crimson',linewidth=5)
+plt.plot(time_values,greater_time_version,c='orange',linewidth=3)
+plt.plot(time_values,lesser_time_version,c='crimson',linewidth=3)
 plt.show()
 
 
 plt.figure(2)
-plt.scatter(greater_compressive_angular_frequency_values,greater_compressive,c='red',s=20)
-plt.scatter(greater_angular_frequencies,greater_weights,c='blue',s=10)
-plt.scatter(lesser_compressive_angular_frequency_values,lesser_compressive,c='orange',s=20)
-plt.scatter(lesser_angular_frequencies,lesser_weights,c='green',s=10)
+plt.scatter(greater_compressive_angular_frequency_values,greater_compressive,c='red',s=500)
+plt.scatter(greater_angular_frequencies,greater_weights,c='blue',s=100)
+plt.scatter(lesser_compressive_angular_frequency_values,lesser_compressive,c='orange',s=500)
+plt.scatter(lesser_angular_frequencies,lesser_weights,c='green',s=100)
+plt.plot(lesser_dct_angular_frequencies * (-1),lesser_dct,c='black')
+plt.plot(greater_dct_angular_frequencies,greater_dct,c='black')
 plt.show()
 
 
