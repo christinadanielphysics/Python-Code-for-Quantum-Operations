@@ -23,7 +23,7 @@ Step 6: Enter numerical parameters as prompted in the console. These numerical p
 4) Value of U for the Hubbard Hamiltonian operator
 5) Value of t for the Hubbard Hamiltonian operator
 
-Step 7: Compile the latex file called main.tex, to see the eigenstates and eigenvalues of the Hubbard Hamiltonian matrix.
+Step 7: Use the data as needed.
 
 To cite this software:
 
