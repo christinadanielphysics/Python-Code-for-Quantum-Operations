@@ -3,7 +3,6 @@ import lesser_green
 import greater_green
 import numpy
 import discrete_cosine_transform
-import math
 import matplotlib.pyplot as plt
 import compressive_sensing
 
