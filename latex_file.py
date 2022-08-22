@@ -134,7 +134,8 @@ for i in range(sites):
 
 a_value = -7
 b_value = 11
-root_finding.find_roots(a_value,b_value)
+step = 3
+root_finding.find_roots(a_value,b_value,step)
 
 # my_latex_file.close_latex_file()
 

@@ -259,9 +259,9 @@ class Multiplicity_Computation:
         else:
             return self.left_limit()
     
-def find_roots(a_min,b_max):
+def find_roots(a_min,b_max,step):
     
-    step = (b_max - a_min)/3
+    step = (b_max - a_min)/step
     
     a = a_min
     b = a_min + step
