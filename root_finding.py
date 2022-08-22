@@ -259,7 +259,7 @@ class Multiplicity_Computation:
         else:
             return self.left_limit()
     
-def find_roots(a_min,b_max,step):
+def find_denominator_roots(a_min,b_max,step):
     
     step = (b_max - a_min)/step
     
@@ -268,7 +268,6 @@ def find_roots(a_min,b_max,step):
     
     all_root_objects = []
     while ( b <= b_max ):
-        print("a",a,"b",b)
         
         z_in_terms_of_t = a + ((t+1)*(b-a)/2) 
         
@@ -344,7 +343,34 @@ def find_roots(a_min,b_max,step):
         number_of_roots = number_of_roots + object.multiplicity
     print("total number of roots including multiplicity:",number_of_roots)
     
+    return all_root_objects
+    
 
-
+def get_numerator_roots():
+    roots = []
+    # Two of the products do not depend on position indices, so calculate them first
+    i = 0
+    j = 0
+    # Import the N-1 interacting data for each pair of position indices
+    filename_Nminus1 = 'n_minus_one' + str(i) + '_' + str(j) + '.txt'
+    my_path_Nminus1 = os.path.join('/Users/christinadaniel/Desktop/Christina_Desktop/data/w_interacting/'+filename_Nminus1)
+    my_opened_file_Nminus1 = open(my_path_Nminus1,"r")
+    my_data_Nminus1 = my_opened_file_Nminus1.readlines()
+    # Import the N+1 interacting data for each pair of position indices
+    filename_Nplus1 = 'n_plus_one' + str(i) + '_' + str(j) + '.txt'
+    my_path_Nplus1 = os.path.join('/Users/christinadaniel/Desktop/Christina_Desktop/data/w_interacting/'+filename_Nplus1)
+    my_opened_file_Nplus1 = open(my_path_Nplus1,"r")
+    my_data_Nplus1 = my_opened_file_Nplus1.readlines()
+    # Parse the N-1 interacting data
+    for line in my_data_Nminus1:
+        contents = line.split()
+        w_difference_for_Nminus1 = float(contents[0])
+        roots.append(w_difference_for_Nminus1)
+    # Parse the N+1 interacting data
+    for line in my_data_Nplus1:
+        contents = line.split()
+        w_difference_for_Nplus1 = float(contents[0])
+        roots.append(w_difference_for_Nplus1)
+    return roots
 
 
