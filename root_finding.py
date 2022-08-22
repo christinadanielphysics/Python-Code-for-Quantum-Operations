@@ -5,7 +5,8 @@ import os
 from scipy import optimize
 import matplotlib.pyplot as plt
 
-V = 4
+
+V = 2
 K = 0
 
 t = sympy.Symbol('t')
@@ -59,6 +60,7 @@ def get_Denominator(z):
         differences_for_b.append(w_difference_for_Nplus1)
     number_of_a_eigenstates = len(my_data_Nminus1)
     number_of_b_eigenstates = len(my_data_Nplus1)
+
 
 
     sum_over_b = 0.0
@@ -132,11 +134,22 @@ class Cheby_Poly:
         self.degree = sympy.degree(expression_in_t) # instance attribute
     def calculate_b_vector(self): # method
         p_bar = self.expression_in_t
-        n = sympy.degree(p_bar)
+        n = 0
+        if p_bar == 0:
+            n = 0
+        else:
+            n = sympy.degree(p_bar)
         p_bar_numerical_evaluation = sympy.lambdify(t,p_bar)
         t_i_values = numpy.linspace(-1,1,num=(n+1),endpoint=True)
         absolute_values = numpy.absolute(p_bar_numerical_evaluation(t_i_values))
-        max_value = max(absolute_values)
+        max_value = 0
+        if n==0:
+            if p_bar == 0:
+                max_value = 1
+            else:
+                max_value = float(self.expression_in_t)
+        else:
+            max_value = max(absolute_values)
         y_bar_i_values = [] # vector for scaled y_bar_i values
         tau = numpy.zeros( (n+1,n+1) ) # matrix for Chebyshev polynomials
         for i,t_i in enumerate(t_i_values):
@@ -159,7 +172,12 @@ class Poly_in_t:
         self.a = a # from change of variables
         self.b = b # from change of variables
         self.degree = sympy.degree(expression)
-        self.coeffs = numpy.flip(sympy.Poly(expression).all_coeffs())
+        if self.degree >= 1:
+            self.coeffs = numpy.flip(sympy.Poly(expression).all_coeffs())
+        else:
+            self.coeffs = expression
+        if expression == 0:
+            self.degree = 0
         self.root_objects = []
     def compute_symbolic_derivative_in_t(self): # method
         a = self.coeffs
@@ -179,7 +197,7 @@ def Brent(my_cheby_poly):
     t_roots = []
     start = -1.0
     stop = 1.0
-    step = 1.0/(my_cheby_poly.degree*5) 
+    step = 1.0/5
     C = stop - step
     D = stop
     while ( C >= start ):
@@ -199,7 +217,7 @@ def Brent_for_derivative(my_cheby_poly,my_cheby_poly_derivative):
     t_roots = []
     start = -1.0
     stop = 1.0
-    step = 1.0/(my_cheby_poly_derivative.degree*5)
+    step = 1.0/5
     C = stop - step
     D = stop
     while ( C >= start ):
@@ -243,58 +261,78 @@ class Multiplicity_Computation:
     
 def find_roots(a_min,b_max):
     
-    step = (b_max - a_min)/10
+    step = (b_max - a_min)/3
     
     a = a_min
     b = a_min + step
     
     all_root_objects = []
     while ( b <= b_max ):
+        print("a",a,"b",b)
         
         z_in_terms_of_t = a + ((t+1)*(b-a)/2) 
         
         pbar_in_t = Poly_in_t(get_Denominator(z_in_terms_of_t),a,b)
         pbar_prime_in_t = Poly_in_t(pbar_in_t.compute_symbolic_derivative_in_t(),a,b)
-        pbar_double_prime_in_t = Poly_in_t(pbar_prime_in_t.compute_symbolic_derivative_in_t(),a,b)
-        
         pbar_in_cheby = Cheby_Poly(pbar_in_t.expression)
-        pbar_prime_in_cheby = Cheby_Poly(pbar_prime_in_t.expression)
-    
-        # Original Polynomial
         
-        t_roots_original = Brent(pbar_in_cheby)
-        
-        valid_t_roots_original = []
-        for index,root in enumerate(t_roots_original):
-            multiplicity_object = Multiplicity_Computation(pbar_in_t.expression,pbar_prime_in_t.expression,root)
-            multiplicity_value = multiplicity_object.limit()
-            if multiplicity_value != 0:
-                root_object = Root_in_t(root,multiplicity_value)
-                valid_t_roots_original.append(root_object) 
-        
-        pbar_in_t.root_objects = valid_t_roots_original # update instance attribute
-        
-        # Derivative Polynomial
-        
-        t_roots_derivative = Brent_for_derivative(pbar_in_cheby,pbar_prime_in_cheby) 
-        
-        valid_t_roots_derivative = []
-        for index,root in enumerate(t_roots_derivative):
-            multiplicity_object = Multiplicity_Computation(pbar_prime_in_t.expression,pbar_double_prime_in_t.expression,root)
-            multiplicity_value = multiplicity_object.limit() + 1 # need to add 1 for the derivative case
-            if multiplicity_value != 0:
-                root_object = Root_in_t(root,multiplicity_value)
-                valid_t_roots_derivative.append(root_object) 
+        if pbar_in_t.degree >= 2:
+            pbar_double_prime_in_t = Poly_in_t(pbar_prime_in_t.compute_symbolic_derivative_in_t(),a,b)
             
-        pbar_prime_in_t.root_objects = valid_t_roots_derivative # update instance attribute
+            pbar_prime_in_cheby = Cheby_Poly(pbar_prime_in_t.expression)
         
-        # Convert roots to the z-domain
+            # Original Polynomial
+            
+            t_roots_original = Brent(pbar_in_cheby)
+            
+            valid_t_roots_original = []
+            for index,root in enumerate(t_roots_original):
+                multiplicity_object = Multiplicity_Computation(pbar_in_t.expression,pbar_prime_in_t.expression,root)
+                multiplicity_value = multiplicity_object.limit()
+                if multiplicity_value != 0:
+                    root_object = Root_in_t(root,multiplicity_value)
+                    valid_t_roots_original.append(root_object) 
+            
+            pbar_in_t.root_objects = valid_t_roots_original # update instance attribute
+            
+            # Derivative Polynomial
+            
+            t_roots_derivative = Brent_for_derivative(pbar_in_cheby,pbar_prime_in_cheby) 
+            
+            valid_t_roots_derivative = []
+            for index,root in enumerate(t_roots_derivative):
+                multiplicity_object = Multiplicity_Computation(pbar_prime_in_t.expression,pbar_double_prime_in_t.expression,root)
+                multiplicity_value = multiplicity_object.limit() + 1 # need to add 1 for the derivative case
+                if multiplicity_value != 0:
+                    root_object = Root_in_t(root,multiplicity_value)
+                    valid_t_roots_derivative.append(root_object) 
+                
+            pbar_prime_in_t.root_objects = valid_t_roots_derivative # update instance attribute
+            
+            # Convert roots to the z-domain
+            
+            for index,object in enumerate(pbar_in_t.convert_root_objects_from_t_to_z()):
+                all_root_objects.append(object)
+            
+            for index,object in enumerate(pbar_prime_in_t.convert_root_objects_from_t_to_z()):
+                all_root_objects.append(object)
+            
+        else:
+            t_roots_original = Brent(pbar_in_cheby)
+            
+            valid_t_roots_original = []
+            for index,root in enumerate(t_roots_original):
+                multiplicity_object = Multiplicity_Computation(pbar_in_t.expression,pbar_prime_in_t.expression,root)
+                multiplicity_value = multiplicity_object.limit()
+                if multiplicity_value != 0:
+                    root_object = Root_in_t(root,multiplicity_value)
+                    valid_t_roots_original.append(root_object) 
+            
+            pbar_in_t.root_objects = valid_t_roots_original # update instance attribute
+            
+            for index,object in enumerate(pbar_in_t.convert_root_objects_from_t_to_z()):
+                all_root_objects.append(object)
         
-        for index,object in enumerate(pbar_in_t.convert_root_objects_from_t_to_z()):
-            all_root_objects.append(object)
-        
-        for index,object in enumerate(pbar_prime_in_t.convert_root_objects_from_t_to_z()):
-            all_root_objects.append(object)
         
         a = a + step
         b = b + step
@@ -306,9 +344,7 @@ def find_roots(a_min,b_max):
         number_of_roots = number_of_roots + object.multiplicity
     print("total number of roots including multiplicity:",number_of_roots)
     
-def run():
-    a_value = float(input("Enter a:"))
-    b_value = float(input("Enter b:"))
-    find_roots(a_value,b_value)
 
-run()
+
+
+
