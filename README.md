@@ -1,4 +1,4 @@
-Numerical parameters are: 
+Numerical parameters: 
 
 1) Number of sites/atoms
 2) Number of up-spin electrons
