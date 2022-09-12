@@ -5,21 +5,21 @@ class Creation_Operator:
         self.numerical_index = numerical_index
         self.spin = spin
     def apply(self,simplified_occupation_state):
-        
+
         initial_up_spin_list = simplified_occupation_state.up_spin_list
         initial_down_spin_list = simplified_occupation_state.down_spin_list
         initial_coefficient = simplified_occupation_state.coefficient
-        
+
         if initial_coefficient == 0:
             final_state = occupation_state.Occupation_State(0,[],[])
             return final_state
-        
+
         final_up_spin_list = initial_up_spin_list
-        final_down_spin_list = initial_down_spin_list 
+        final_down_spin_list = initial_down_spin_list
         final_coefficient = initial_coefficient
-        
+
         operator_numerical_index = self.numerical_index
-            
+
         if self.spin == "up":
             final_up_spin_list = []
             skips = 0
@@ -27,7 +27,7 @@ class Creation_Operator:
             for extra_skips,number in enumerate(initial_up_spin_list):
                 if number == operator_numerical_index:
                     final_coefficient = 0 # annihilation
-                elif operator_numerical_index < number:
+                elif number > operator_numerical_index:
                     right_index = extra_skips
                     break
                 else:
@@ -46,11 +46,11 @@ class Creation_Operator:
             for extra_skips,number in enumerate(initial_down_spin_list):
                 if number == operator_numerical_index:
                     final_coefficient = 0 # annihilation
-                elif operator_numerical_index < number:
-                    right_index = extra_skips 
+                elif number > operator_numerical_index:
+                    right_index = extra_skips
                     break
                 else:
-                    skips = skips + 1 
+                    skips = skips + 1
                     final_down_spin_list.append(number)
             if final_coefficient != 0:
                 final_coefficient = initial_coefficient * (-1)**skips
@@ -58,8 +58,8 @@ class Creation_Operator:
                 while right_index < len(initial_down_spin_list):
                     final_down_spin_list.append(initial_down_spin_list[right_index])
                     right_index = right_index + 1
-                
-        
+
+
         final_state = occupation_state.Occupation_State(final_coefficient,final_up_spin_list,final_down_spin_list)
         return final_state
     def write_c_dagger(self,f):
